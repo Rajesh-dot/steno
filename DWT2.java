@@ -8,7 +8,6 @@ public class DWT2 {
 
         // Embed the text in the d1, d2, d3, and d4 coefficients
         dwt = embedTextInCoefficients(dwt, text);
-        System.out.println(dwt[78][422]);
 
         // Return the modified image
         BufferedImage t = inverseDWT(dwt);
@@ -58,10 +57,10 @@ public class DWT2 {
         for (int i = 0; i < height - 1; i+=2) {
             for (int j = 0; j < width - 1; j+=2) {
                 // Get the RGB value of the current pixel
-                int p1 = image.getRGB(j, i);
-                int p2 = image.getRGB(j + 1, i);
-                int p3 = image.getRGB(j, i + 1);
-                int p4 = image.getRGB(j + 1, i + 1);
+                int p1 = (int)Math.floor(image.getRGB(j, i)/3.0);
+                int p2 = (int)Math.floor(image.getRGB(j + 1, i)/3.0);
+                int p3 = (int)Math.floor(image.getRGB(j, i + 1)/3.0);
+                int p4 = (int)Math.floor(image.getRGB(j + 1, i + 1)/3.0);
 
                 // Calculate the d1, d2, d3, and d4 coefficients
                 // int d1 = (p1 + p2 + p3 + p4) / 4;
@@ -181,17 +180,16 @@ public class DWT2 {
     public int normalize(int value, int x){
       value = -value;
       x=-x;
-      int near = value+(9-value%9);
-      value=near+(value%3)*3+x%3;
+      value=value*3+x%3;
       return -1*value;
     }
 
-    public int denormalize(int value){
+    public double denormalize(int value){
       value=-value;
-      int r=value%9;
-      int d=r%3;
-      value-=;
-      return -value;
+      int d=value%3;
+      value/=3;
+      double ans=value+d/3.0;
+      return -ans;
     }
 
     public int[][] performDWTExtract(BufferedImage image) {
@@ -207,10 +205,15 @@ public class DWT2 {
         for (int i = 0; i < height - 1; i+=2) {
             for (int j = 0; j < width - 1; j+=2) {
                 // Get the RGB value of the current pixel
-                int p1 = image.getRGB(j, i);
-                int p2 = image.getRGB(j + 1, i);
-                int p3 = image.getRGB(j, i + 1);
-                int p4 = image.getRGB(j + 1, i + 1);
+                int px1 = image.getRGB(j, i);
+                int px2 = image.getRGB(j + 1, i);
+                int px3 = image.getRGB(j, i + 1);
+                int px4 = image.getRGB(j + 1, i + 1);
+
+                double p1=denormalize(px1);
+                double p2=denormalize(px2);
+                double p3=denormalize(px3);
+                double p4=denormalize(px4);
 
                 // Calculate the d1, d2, d3, and d4 coefficients
                 // int d1 = (p1 + p2 + p3 + p4) / 4;
@@ -231,10 +234,10 @@ public class DWT2 {
                 c++;
 
                 
-                int d1 = p1 + p3 + p4 - 2*p2;
-                int d2 = p2 + p4 + p1 - 2*p3;
-                int d3 = p3 + p1 + p2 - 2*p4;
-                int d4 = p4 + p2 + p3 - 2*p1;
+                int d1 = (int)Math.floor(p1 + p3 + p4 - 2*p2);
+                int d2 = (int)Math.floor(p2 + p4 + p1 - 2*p3);
+                int d3 = (int)Math.floor(p3 + p1 + p2 - 2*p4);
+                int d4 = (int)Math.floor(p4 + p2 + p3 - 2*p1);
 
                 if(c<40){
                   System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
