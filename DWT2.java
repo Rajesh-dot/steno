@@ -38,7 +38,6 @@ public class DWT2 {
         int[][] dwt = new int[height][width];
 
         // Loop over the image and perform the DWT
-        int c=0;
         for (int i = 0; i < height - 1; i+=2) {
             for (int j = 0; j < width - 1; j+=2) {
                 // Get the RGB value of the current pixel
@@ -47,17 +46,10 @@ public class DWT2 {
                 int p3 = (int)Math.floor(image.getRGB(j, i + 1)/3.0);
                 int p4 = (int)Math.floor(image.getRGB(j + 1, i + 1)/3.0);
 
-                
                 int d1 = p1 + p3 + p4 - 2*p2;
                 int d2 = p2 + p4 + p1 - 2*p3;
                 int d3 = p3 + p1 + p2 - 2*p4;
                 int d4 = p4 + p2 + p3 - 2*p1;
-
-                if(c<20){
-                    System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
-                    System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
-                    c++;
-                }
 
                 // Store the d1, d2, d3, and d4 coefficients in the DWT array
                 dwt[i][j] = d1;
@@ -81,14 +73,12 @@ public class DWT2 {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         // Loop over the dwt array and perform the inverse DWT
-        int c=0;
         for (int i = 0; i < height - 1; i += 2) {
             for (int j = 0; j < width - 1; j += 2) {
                 int d1 = dwt[i][j];
                 int d2 = dwt[i][j + 1];
                 int d3 = dwt[i + 1][j];
                 int d4 = dwt[i + 1][j + 1];
-
                 
                 int p1 = (d1 + d2 + d3) / 3;
                 int p2 = (d2 + d3 + d4) / 3;
@@ -99,14 +89,6 @@ public class DWT2 {
                 p2=normalize(p2, d2+d3+d4);
                 p3=normalize(p3, d3+d4+d1);
                 p4=normalize(p4, d4+d1+d2);
-
-
-                if(c<20){
-                    System.out.println("d1: " + dwt[i][j] + " d2: " + dwt[i+1][j] + " d3: " + dwt[i][j+1] + " d4: " + dwt[i+1][j+1]);
-                    System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
-                    c++;
-                }
-
 
                 // Set the RGB values of the current pixels in the image
                 image.setRGB(j, i, p1);
@@ -144,7 +126,6 @@ public class DWT2 {
         int[][] dwt = new int[height][width];
 
         // Loop over the image and perform the DWT
-        int c=0;
         for (int i = 0; i < height - 1; i+=2) {
             for (int j = 0; j < width - 1; j+=2) {
                 // Get the RGB value of the current pixel
@@ -158,17 +139,10 @@ public class DWT2 {
                 double p3=denormalize(px3);
                 double p4=denormalize(px4);
 
-                
                 int d1 = (int)Math.floor(p1 + p3 + p4 - 2*p2);
                 int d2 = (int)Math.floor(p2 + p4 + p1 - 2*p3);
                 int d3 = (int)Math.floor(p3 + p1 + p2 - 2*p4);
                 int d4 = (int)Math.floor(p4 + p2 + p3 - 2*p1);
-
-                if(c<20){
-                    System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
-                    System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
-                    c++;
-                }
 
                 // Store the d1, d2, d3, and d4 coefficients in the DWT array
                 dwt[i][j] = d1;
@@ -219,9 +193,7 @@ public class DWT2 {
                         coefficient ^= 1; // set the least significant bit
                     }
                 }
-                //System.out.println("Before: " + dwt[i][j]);
                 dwt[i][j] = coefficient;
-                //System.out.println("After: " + dwt[i][j]);
                 messageIndex++;
             }
         }
@@ -235,10 +207,8 @@ public class DWT2 {
         // Loop over the d1, d2, d3, and d4 coefficients and extract the bits from the
         // least significant bit of the coefficients
         String binaryText = "";
-        // System.out.println("binaryText: " + binaryText);
         String text = "";
         int bits = 0;
-        int s=0;
         for (int i = 0; i < dwt.length; i++) {
             for (int j = 0; j < dwt[i].length; j++) {
                 // Get the current coefficient and the least significant bit
@@ -248,23 +218,18 @@ public class DWT2 {
 
                 // Add the bit to the binary string
                 // binaryText += bit;
-                System.out.println(coefficient);
                 binaryText += ((coefficient & 1) == 1) ? '1' : '0';
                 if (bits==8){
-                    if (binaryText.equals("00000000")){
-                        System.out.println("text: " + text);
+                    if (binaryText.equals("00000000") || binaryText.equals("11111111")){
                         return text;
                     }
-                    System.out.println("Binary: " + binaryText);
                     char c = (char) Integer.parseInt(binaryText, 2);
                     text += c;
                     binaryText = "";
                     bits = 0;
                 }
-                s++;
             }
         }
-        // System.out.println("binaryText: " + binaryText);
 
         // Return the extracted binary string
         return text;
