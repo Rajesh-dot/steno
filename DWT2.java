@@ -200,30 +200,30 @@ public class DWT2 {
         // binary string in the least significant bit of the coefficients
         int messageIndex = 0;
         for (int i = 0; i < dwt.length; i++) {
-          for (int j = 0; j < dwt[i].length; j++) {
-            if (messageIndex >= binaryText.length()) {
-                // message has been stored, so stop
-                System.out.println("breaked");
-                return dwt;
-            }
-            // set the least significant bit of the coefficient to the value of the corresponding message bit
-            // dwt[i][j] = (coefficient & ~1) | bit;
-            int coefficient = (int) dwt[i][j];
-            if (coefficient%2==0){
-                if(binaryText.charAt(messageIndex)=='1') {
-                    coefficient |= 1; // set the least significant bit
+            for (int j = 0; j < dwt[i].length; j++) {
+                if (messageIndex >= binaryText.length()) {
+                    // message has been stored, so stop
+                    System.out.println("breaked");
+                    return dwt;
                 }
-            }
-            else{
-                if(binaryText.charAt(messageIndex)=='0') {
-                    coefficient ^= 1; // set the least significant bit
+                // set the least significant bit of the coefficient to the value of the corresponding message bit
+                // dwt[i][j] = (coefficient & ~1) | bit;
+                int coefficient = (int) dwt[i][j];
+                if (coefficient%2==0){
+                    if(binaryText.charAt(messageIndex)=='1') {
+                        coefficient |= 1; // set the least significant bit
+                    }
                 }
+                else{
+                    if(binaryText.charAt(messageIndex)=='0') {
+                        coefficient ^= 1; // set the least significant bit
+                    }
+                }
+                //System.out.println("Before: " + dwt[i][j]);
+                dwt[i][j] = coefficient;
+                //System.out.println("After: " + dwt[i][j]);
+                messageIndex++;
             }
-            //System.out.println("Before: " + dwt[i][j]);
-            dwt[i][j] = coefficient;
-            //System.out.println("After: " + dwt[i][j]);
-            messageIndex++;
-          }
         }
 
         // Return the modified d1, d2, d3, and d4 coefficients
