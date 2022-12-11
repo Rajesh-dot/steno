@@ -54,9 +54,9 @@ public class DWT2 {
                 int d4 = p4 + p2 + p3 - 2*p1;
 
                 if(c<20){
-                  System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
-                  System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
-                  c++;
+                    System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
+                    System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
+                    c++;
                 }
 
                 // Store the d1, d2, d3, and d4 coefficients in the DWT array
@@ -102,9 +102,9 @@ public class DWT2 {
 
 
                 if(c<20){
-                  System.out.println("d1: " + dwt[i][j] + " d2: " + dwt[i+1][j] + " d3: " + dwt[i][j+1] + " d4: " + dwt[i+1][j+1]);
-                  System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
-                  c++;
+                    System.out.println("d1: " + dwt[i][j] + " d2: " + dwt[i+1][j] + " d3: " + dwt[i][j+1] + " d4: " + dwt[i+1][j+1]);
+                    System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
+                    c++;
                 }
 
 
@@ -121,18 +121,18 @@ public class DWT2 {
     }
 
     public int normalize(int value, int x){
-      value = -value;
-      x=-x;
-      value=value*3+x%3;
-      return -1*value;
+        value = -value;
+        x=-x;
+        value=value*3+x%3;
+        return -1*value;
     }
 
     public double denormalize(int value){
-      value=-value;
-      int d=value%3;
-      value/=3;
-      double ans=value+d/3.0;
-      return -ans;
+        value=-value;
+        int d=value%3;
+        value/=3;
+        double ans=value+d/3.0;
+        return -ans;
     }
 
     public int[][] performDWTExtract(BufferedImage image) {
@@ -165,9 +165,9 @@ public class DWT2 {
                 int d4 = (int)Math.floor(p4 + p2 + p3 - 2*p1);
 
                 if(c<20){
-                  System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
-                  System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
-                  c++;
+                    System.out.println("d1: " + d1 + " d2: " + d2 + " d3: " + d3 + " d4: " + d4);
+                    System.out.println("p1: " + p1 + " p2: " + p2 + " p3: " + p3 + " p4: " + p4);
+                    c++;
                 }
 
                 // Store the d1, d2, d3, and d4 coefficients in the DWT array
@@ -187,12 +187,12 @@ public class DWT2 {
         // Convert the text into a binary string, where each character is represented by 8 bits
         String binaryText = "";
         for (char c : text.toCharArray()) {
-          String binaryChar = Integer.toBinaryString(c);
-          while (binaryChar.length() < 8) {
-            // pad with 0s
-            binaryChar = "0" + binaryChar;
-          }
-          binaryText += binaryChar;
+            String binaryChar = Integer.toBinaryString(c);
+            while (binaryChar.length() < 8) {
+                // pad with 0s
+                binaryChar = "0" + binaryChar;
+            }
+            binaryText += binaryChar;
         }
         System.out.println("binaryText: " + binaryText);
 
@@ -202,22 +202,22 @@ public class DWT2 {
         for (int i = 0; i < dwt.length; i++) {
           for (int j = 0; j < dwt[i].length; j++) {
             if (messageIndex >= binaryText.length()) {
-              // message has been stored, so stop
-              System.out.println("breaked");
-              return dwt;
+                // message has been stored, so stop
+                System.out.println("breaked");
+                return dwt;
             }
             // set the least significant bit of the coefficient to the value of the corresponding message bit
             // dwt[i][j] = (coefficient & ~1) | bit;
             int coefficient = (int) dwt[i][j];
             if (coefficient%2==0){
-              if(binaryText.charAt(messageIndex)=='1') {
-                coefficient |= 1; // set the least significant bit
-              }
+                if(binaryText.charAt(messageIndex)=='1') {
+                    coefficient |= 1; // set the least significant bit
+                }
             }
             else{
-              if(binaryText.charAt(messageIndex)=='0') {
-                coefficient ^= 1; // set the least significant bit
-              }
+                if(binaryText.charAt(messageIndex)=='0') {
+                    coefficient ^= 1; // set the least significant bit
+                }
             }
             //System.out.println("Before: " + dwt[i][j]);
             dwt[i][j] = coefficient;
@@ -251,15 +251,15 @@ public class DWT2 {
                 System.out.println(coefficient);
                 binaryText += ((coefficient & 1) == 1) ? '1' : '0';
                 if (bits==8){
-                  if (binaryText.equals("00000000")){
-                    System.out.println("text: " + text);
-                    return text;
-                  }
-                  System.out.println("Binary: " + binaryText);
-                  char c = (char) Integer.parseInt(binaryText, 2);
-                  text += c;
-                  binaryText = "";
-                  bits = 0;
+                    if (binaryText.equals("00000000")){
+                        System.out.println("text: " + text);
+                        return text;
+                    }
+                    System.out.println("Binary: " + binaryText);
+                    char c = (char) Integer.parseInt(binaryText, 2);
+                    text += c;
+                    binaryText = "";
+                    bits = 0;
                 }
                 s++;
             }
