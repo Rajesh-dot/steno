@@ -151,17 +151,11 @@ public class DWT2 {
                 int p2 = (d2 + d3 + d4) / 3;
                 int p3 = (d3 + d4 + d1) / 3;
                 int p4 = (d4 + d1 + d2) / 3;
-                if(p1%3==0){
-                  int t=-(d1 + d2 + d3);
-                  int near = p1-(p1%9);
-                  if(t%3==0){
-                    p1=t/3;
-                  }
-                }
-                p1-=(-d1 - d2 - d3)%3;
-                p2-=(-d2 - d3 - d4)%3;
-                p3-=(-d3 - d4 - d1)%3;
-                p4-=(-d4 - d1 - d2)%3;
+                
+                p1=normalize(p1, d1+d2+d3);
+                p2=normalize(p2, d2+d3+d4);
+                p3=normalize(p3, d3+d4+d1);
+                p4=normalize(p4, d4+d1+d2);
 
 
                 if(c<40){
@@ -184,6 +178,22 @@ public class DWT2 {
         return image;
     }
 
+    public int normalize(int value, int x){
+      value = -value;
+      x=-x;
+      int near = value+(9-value%9);
+      value=near+(value%3)*3+x%3;
+      return -1*value;
+    }
+
+    public int denormalize(int value){
+      value=-value;
+      int r=value%9;
+      int d=r%3;
+      value-=;
+      return -value;
+    }
+
     public int[][] performDWTExtract(BufferedImage image) {
         // Get the width and height of the image
         int width = image.getWidth();
@@ -201,16 +211,6 @@ public class DWT2 {
                 int p2 = image.getRGB(j + 1, i);
                 int p3 = image.getRGB(j, i + 1);
                 int p4 = image.getRGB(j + 1, i + 1);
-                if(p1%3!=0){
-                  p1+=p1%3;
-                  p1-=
-                }
-                if(p2%3!=0){
-                  p2+=p2%3;
-                }
-                if(p3%3!=0){
-                  p3+=p3%3;
-                }
 
                 // Calculate the d1, d2, d3, and d4 coefficients
                 // int d1 = (p1 + p2 + p3 + p4) / 4;
